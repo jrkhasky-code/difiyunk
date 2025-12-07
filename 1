@@ -1,0 +1,28 @@
+Paste the following code into the script:
+
+Bash
+
+#!/bin/bash
+
+# Define paths
+ACTIVE_LINK="$HOME/.config/qtile"
+SLEEK_PATH="$HOME/dotfiles/config-sleek/qtile"
+TWE_PATH="$HOME/dotfiles/config-twe/qtile"
+
+# Check the current active configuration
+CURRENT_TARGET=$(readlink "$ACTIVE_LINK")
+
+if [ "$CURRENT_TARGET" == "$SLEEK_PATH" ]; then
+    # Switch to TWE Mode
+    rm "$ACTIVE_LINK"
+    ln -s "$TWE_PATH" "$ACTIVE_LINK"
+    echo "Switched to TWE Mode. Restarting Qtile..."
+else
+    # Switch to Sleek Mode
+    rm "$ACTIVE_LINK"
+    ln -s "$SLEEK_PATH" "$ACTIVE_LINK"
+    echo "Switched to Sleek Mode. Restarting Qtile..."
+fi
+
+# Restart Qtile to apply the new config immediately
+qtile cmd-obj -o cmd -f restart
